@@ -88,7 +88,7 @@ export class Buffer extends AbstractObject<WebGLBuffer> implements Bindable {
             this.unbind();
         }
 
-        this._valid = gl.isBuffer(this._object) && gl.getError() === gl.NO_ERROR;
+        // this._valid = gl.isBuffer(this._object) && gl.getError() === gl.NO_ERROR;
         const bytes: GLsizei = this._valid ? data.byteLength : 0;
         this.context.allocationRegister.reallocate(this._identifier, bytes);
     }
