@@ -40,6 +40,7 @@
         "@types/mocha": "~5.2.1",
         "@types/query-string": "~5.1.0",
         "@types/sinon": "~4.3.3",
+        "@types/webgl2": "~0.0.4",
         "chai": "~4.1.2",
         "chai-spies": "~1.0.0",
         "coveralls": "~3.0.1",

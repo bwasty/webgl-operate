@@ -59,7 +59,7 @@ export class Context {
      * Created context. The actual type depends on the created context.
      * @see {@link gl}
      */
-    protected _context: any; // WebGLRenderingContext | WebGL2RenderingContext;
+    protected _context: WebGLRenderingContext | WebGL2RenderingContext;
 
     /** @see {@link mask} */
     protected _mask: ContextMasquerade | undefined;
@@ -185,7 +185,7 @@ export class Context {
      * If the value is true, the drawing buffer has an alpha channel for the purposes of performing OpenGL destination
      * alpha operations and compositing with the page. If the value is false, no alpha buffer is available.
      */
-    get alpha(): boolean {
+    get alpha(): boolean | undefined {
         return this._context.getContextAttributes().alpha;
     }
 
@@ -195,7 +195,7 @@ export class Context {
      * using its choice of technique (multisample/supersample) and quality. If the value is false or the implementation
      * does not support antialiasing, no antialiasing is performed.
      */
-    get antialias(): boolean {
+    get antialias(): boolean | undefined {
         return this._context.getContextAttributes().antialias;
     }
 
@@ -204,7 +204,7 @@ export class Context {
      * If the value is true, the drawing buffer has a depth buffer of at least 16 bits. If the value is false, no depth
      * buffer is available.
      */
-    get depth(): boolean {
+    get depth(): boolean | undefined {
         return this._context.getContextAttributes().depth;
     }
 
@@ -214,7 +214,7 @@ export class Context {
      * created WebGL context would be dramatically lower than that of a native application making equivalent OpenGL
      * calls...
      */
-    get failIfMajorPerformanceCaveat(): boolean {
+    get failIfMajorPerformanceCaveat(): boolean | undefined {
         return this._context.getContextAttributes().failIfMajorPerformanceCaveat;
     }
 
@@ -225,7 +225,7 @@ export class Context {
      * This flag is ignored if the alpha flag is false. See Premultiplied Alpha for more information on the effects of
      * the premultipliedAlpha flag.
      */
-    get premultipliedAlpha(): boolean {
+    get premultipliedAlpha(): boolean | undefined {
         return this._context.getContextAttributes().premultipliedAlpha;
     }
 
@@ -236,7 +236,7 @@ export class Context {
      * are cleared. If the value is true the buffers will not be cleared and will preserve their values until cleared
      * or overwritten by the author.
      */
-    get preserveDrawingBuffer(): boolean {
+    get preserveDrawingBuffer(): boolean | undefined {
         return this._context.getContextAttributes().preserveDrawingBuffer;
     }
 
@@ -245,7 +245,7 @@ export class Context {
      * If the value is true, the drawing buffer has a stencil buffer of at least 8 bits. If the value is false, no
      * stencil buffer is available.
      */
-    get stencil(): boolean {
+    get stencil(): boolean | undefined {
         return this._context.getContextAttributes().stencil;
     }
 
@@ -298,7 +298,7 @@ export class Context {
      * This function should get called only once per Context instance.
      */
     protected queryExtensionSupport(): void {
-        this._extensions = this._context.getSupportedExtensions();
+        this._extensions = this._context.getSupportedExtensions()!;
 
         if (this._backend === Context.BackendType.WebGL1) {
             this.ANGLE_instanced_arrays_supported = this.supports('ANGLE_instanced_arrays');
@@ -361,9 +361,8 @@ export class Context {
     }
 
     /**
-     * Context this is of type 'any' for now, since WebGL2RenderingContext not available but supported. This
-     * constructor is protected to enforce context creation using `request`. It queries extension support and
-     * configures context specifics for convenience, e.g., HALF_FLOAT format.
+     * This constructor is protected to enforce context creation using `request`.
+     * It queries extension support and configures context specifics for convenience, e.g., HALF_FLOAT format.
      */
     protected constructor(context: any, mask: ContextMasquerade | undefined) {
         this._context = context;
@@ -789,14 +788,14 @@ export class Context {
      * True if WebGL2 blitFramebuffer is supported, false otherwise. This is experimental technology.
      */
     get supportsBlitFramebuffer(): boolean {
-        return this._context.blitFramebuffer !== undefined;
+        return (this._context as any).blitFramebuffer !== undefined;
     }
 
     /**
      * True if WebGL2 readBuffer is supported, false otherwise. This is experimental technology.
      */
     get supportsReadBuffer(): boolean {
-        return this._context.readBuffer !== undefined;
+        return (this._context as any).readBuffer !== undefined;
     }
 
     // PARAMETER QUERIES
@@ -860,62 +859,63 @@ export class Context {
 
 
         if (this.isWebGL2) {
+            const context = this._context as WebGL2RenderingContext;
             pNamesAndValues.push(['MAX_3D_TEXTURE_SIZE',
-                this._context.getParameter(this._context.MAX_3D_TEXTURE_SIZE)]);
+                context.getParameter(context.MAX_3D_TEXTURE_SIZE)]);
             pNamesAndValues.push(['MAX_ARRAY_TEXTURE_LAYERS',
-                this._context.getParameter(this._context.MAX_ARRAY_TEXTURE_LAYERS)]);
+                context.getParameter(context.MAX_ARRAY_TEXTURE_LAYERS)]);
             pNamesAndValues.push(['MAX_CLIENT_WAIT_TIMEOUT_WEBGL',
-                this._context.getParameter(this._context.MAX_CLIENT_WAIT_TIMEOUT_WEBGL)]);
+                context.getParameter(context.MAX_CLIENT_WAIT_TIMEOUT_WEBGL)]);
             pNamesAndValues.push(['MAX_COLOR_ATTACHMENTS',
-                this._context.getParameter(this._context.MAX_COLOR_ATTACHMENTS)]);
+                context.getParameter(context.MAX_COLOR_ATTACHMENTS)]);
             pNamesAndValues.push(['MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS',
-                this._context.getParameter(this._context.MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS)]);
+                context.getParameter(context.MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS)]);
             pNamesAndValues.push(['MAX_COMBINED_UNIFORM_BLOCKS',
-                this._context.getParameter(this._context.MAX_COMBINED_UNIFORM_BLOCKS)]);
+                context.getParameter(context.MAX_COMBINED_UNIFORM_BLOCKS)]);
             pNamesAndValues.push(['MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS',
-                this._context.getParameter(this._context.MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS)]);
+                context.getParameter(context.MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS)]);
             pNamesAndValues.push(['MAX_DRAW_BUFFERS',
-                this._context.getParameter(this._context.MAX_DRAW_BUFFERS)]);
+                context.getParameter(context.MAX_DRAW_BUFFERS)]);
             pNamesAndValues.push(['MAX_ELEMENT_INDEX',
-                this._context.getParameter(this._context.MAX_ELEMENT_INDEX)]);
+                context.getParameter(context.MAX_ELEMENT_INDEX)]);
             pNamesAndValues.push(['MAX_ELEMENTS_INDICES',
-                this._context.getParameter(this._context.MAX_ELEMENTS_INDICES)]);
+                context.getParameter(context.MAX_ELEMENTS_INDICES)]);
             pNamesAndValues.push(['MAX_ELEMENTS_VERTICES',
-                this._context.getParameter(this._context.MAX_ELEMENTS_VERTICES)]);
+                context.getParameter(context.MAX_ELEMENTS_VERTICES)]);
             pNamesAndValues.push(['MAX_FRAGMENT_INPUT_COMPONENTS',
-                this._context.getParameter(this._context.MAX_FRAGMENT_INPUT_COMPONENTS)]);
+                context.getParameter(context.MAX_FRAGMENT_INPUT_COMPONENTS)]);
             pNamesAndValues.push(['MAX_FRAGMENT_UNIFORM_BLOCKS',
-                this._context.getParameter(this._context.MAX_FRAGMENT_UNIFORM_BLOCKS)]);
+                context.getParameter(context.MAX_FRAGMENT_UNIFORM_BLOCKS)]);
             pNamesAndValues.push(['MAX_FRAGMENT_UNIFORM_COMPONENTS',
-                this._context.getParameter(this._context.MAX_FRAGMENT_UNIFORM_COMPONENTS)]);
+                context.getParameter(context.MAX_FRAGMENT_UNIFORM_COMPONENTS)]);
             pNamesAndValues.push(['MAX_PROGRAM_TEXEL_OFFSET',
-                this._context.getParameter(this._context.MAX_PROGRAM_TEXEL_OFFSET)]);
+                context.getParameter(context.MAX_PROGRAM_TEXEL_OFFSET)]);
             pNamesAndValues.push(['MAX_SAMPLES',
-                this._context.getParameter(this._context.MAX_SAMPLES)]);
+                context.getParameter(context.MAX_SAMPLES)]);
             pNamesAndValues.push(['MAX_SERVER_WAIT_TIMEOUT',
-                this._context.getParameter(this._context.MAX_SERVER_WAIT_TIMEOUT)]);
+                context.getParameter(context.MAX_SERVER_WAIT_TIMEOUT)]);
             pNamesAndValues.push(['MAX_TEXTURE_LOD_BIAS',
-                this._context.getParameter(this._context.MAX_TEXTURE_LOD_BIAS)]);
+                context.getParameter(context.MAX_TEXTURE_LOD_BIAS)]);
             pNamesAndValues.push(['MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS',
-                this._context.getParameter(this._context.MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS)]);
+                context.getParameter(context.MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS)]);
             pNamesAndValues.push(['MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS',
-                this._context.getParameter(this._context.MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS)]);
+                context.getParameter(context.MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS)]);
             pNamesAndValues.push(['MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS',
-                this._context.getParameter(this._context.MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS)]);
+                context.getParameter(context.MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS)]);
             pNamesAndValues.push(['MAX_UNIFORM_BLOCK_SIZE',
-                this._context.getParameter(this._context.MAX_UNIFORM_BLOCK_SIZE)]);
+                context.getParameter(context.MAX_UNIFORM_BLOCK_SIZE)]);
             pNamesAndValues.push(['MAX_UNIFORM_BUFFER_BINDINGS',
-                this._context.getParameter(this._context.MAX_UNIFORM_BUFFER_BINDINGS)]);
+                context.getParameter(context.MAX_UNIFORM_BUFFER_BINDINGS)]);
             pNamesAndValues.push(['MAX_VARYING_COMPONENTS',
-                this._context.getParameter(this._context.MAX_VARYING_COMPONENTS)]);
+                context.getParameter(context.MAX_VARYING_COMPONENTS)]);
             pNamesAndValues.push(['MAX_VERTEX_OUTPUT_COMPONENTS',
-                this._context.getParameter(this._context.MAX_VERTEX_OUTPUT_COMPONENTS)]);
+                context.getParameter(context.MAX_VERTEX_OUTPUT_COMPONENTS)]);
             pNamesAndValues.push(['MAX_VERTEX_UNIFORM_BLOCKS',
-                this._context.getParameter(this._context.MAX_VERTEX_UNIFORM_BLOCKS)]);
+                context.getParameter(context.MAX_VERTEX_UNIFORM_BLOCKS)]);
             pNamesAndValues.push(['MAX_VERTEX_UNIFORM_COMPONENTS',
-                this._context.getParameter(this._context.MAX_VERTEX_UNIFORM_COMPONENTS)]);
+                context.getParameter(context.MAX_VERTEX_UNIFORM_COMPONENTS)]);
             pNamesAndValues.push(['MIN_PROGRAM_TEXEL_OFFSET',
-                this._context.getParameter(this._context.MIN_PROGRAM_TEXEL_OFFSET)]);
+                context.getParameter(context.MIN_PROGRAM_TEXEL_OFFSET)]);
         }
 
         if (this.isWebGL1) {
