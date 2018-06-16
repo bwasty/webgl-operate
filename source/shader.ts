@@ -56,7 +56,7 @@ export class Shader extends AbstractObject<WebGLShader> {
      * @param source - Shader source.
      * @returns - Either a new shader or undefined if compilation failed.
      */
-    protected create(source: string): WebGLShader | undefined {
+    protected create(source: string): WebGLShader | null {
         const gl = this._context.gl;
         this._object = gl.createShader(this._type);
         assert(this._object instanceof WebGLShader, `expected WebGLShader object to be created`);
@@ -69,11 +69,12 @@ export class Shader extends AbstractObject<WebGLShader> {
         gl.compileShader(this._object);
 
         if (!gl.getShaderParameter(this._object, gl.COMPILE_STATUS)) {
-            const infoLog: string = gl.getShaderInfoLog(this._object);
+            const infoLog = gl.getShaderInfoLog(this._object);
             log(LogLevel.Dev, `compilation of shader '${this._identifier}' failed: ${infoLog}`);
 
             this.delete();
-            return undefined;
+            // tslint:disable-next-line:no-null-keyword
+            return null;
         }
 
         this._valid = gl.isShader(this._object);
@@ -86,7 +87,8 @@ export class Shader extends AbstractObject<WebGLShader> {
     protected delete(): void {
         assert(this._object !== undefined, `expected WebGLShader object`);
         this._context.gl.deleteShader(this._object);
-        this._object = undefined;
+        // tslint:disable-next-line:no-null-keyword
+        this._object = null;
         this._valid = false;
     }
 

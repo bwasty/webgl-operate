@@ -20,7 +20,8 @@ export class Renderbuffer extends AbstractObject<WebGLRenderbuffer> implements B
     /**
      * Default renderbuffer, e.g., used for unbind.
      */
-    static readonly DEFAULT_RENDER_BUFFER = undefined;
+    // tslint:disable-next-line:no-null-keyword
+    static readonly DEFAULT_RENDER_BUFFER = null;
 
     /** @see {@link width} */
     protected _width: GLsizei;
@@ -39,7 +40,7 @@ export class Renderbuffer extends AbstractObject<WebGLRenderbuffer> implements B
      * @param size - Initial size of the renderbuffer.
      * @param internalFormat - Internal format of the renderbuffer data.
      */
-    protected create(width: GLsizei, height: GLsizei, internalFormat: GLenum): WebGLRenderbuffer | undefined {
+    protected create(width: GLsizei, height: GLsizei, internalFormat: GLenum): WebGLRenderbuffer | null {
         assert(width > 0 && height > 0, `renderbuffer object requires valid width and height greater than zero`);
         const gl = this.context.gl;
 
@@ -68,7 +69,8 @@ export class Renderbuffer extends AbstractObject<WebGLRenderbuffer> implements B
         assert(this._object instanceof WebGLRenderbuffer, `expected WebGLRenderbuffer object`);
         this.context.gl.deleteRenderbuffer(this._object);
 
-        this._object = undefined;
+        // tslint:disable-next-line:no-null-keyword
+        this._object = null;
         this._valid = false;
 
         this._internalFormat = undefined;
@@ -113,7 +115,7 @@ export class Renderbuffer extends AbstractObject<WebGLRenderbuffer> implements B
         if (bind) {
             this.bind();
         }
-        gl.renderbufferStorage(gl.RENDERBUFFER, this._internalFormat, width, height);
+        gl.renderbufferStorage(gl.RENDERBUFFER, this._internalFormat!, width, height);
         if (unbind) {
             this.unbind();
         }

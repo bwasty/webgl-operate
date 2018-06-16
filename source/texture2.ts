@@ -24,7 +24,8 @@ export class Texture2 extends AbstractObject<WebGLTexture> implements Bindable {
     /**
      * Default texture, e.g., used for unbind.
      */
-    static readonly DEFAULT_TEXTURE = undefined;
+    // tslint:disable-next-line:no-null-keyword
+    static readonly DEFAULT_TEXTURE = null;
 
     /** @see {@link width} */
     protected _width: GLsizei = 0;
@@ -51,7 +52,7 @@ export class Texture2 extends AbstractObject<WebGLTexture> implements Bindable {
      * @param type - Data type of the texel data.
      */
     protected create(width: GLsizei, height: GLsizei, internalFormat: GLenum,
-        format: GLenum, type: GLenum): WebGLTexture | undefined {
+        format: GLenum, type: GLenum): WebGLTexture | null {
 
         assert(width > 0 && height > 0, `texture requires valid width and height of greater than zero`);
         const gl = this._context.gl;
@@ -89,7 +90,8 @@ export class Texture2 extends AbstractObject<WebGLTexture> implements Bindable {
         assert(this._object instanceof WebGLTexture, `expected WebGLTexture object`);
         this._context.gl.deleteTexture(this._object);
 
-        this._object = undefined;
+        // tslint:disable-next-line:no-null-keyword
+        this._object = null;
         this._valid = false;
 
         this._internalFormat = 0;
@@ -177,9 +179,9 @@ export class Texture2 extends AbstractObject<WebGLTexture> implements Bindable {
 
             bytes = this._width * this._height * byteSizeOfFormat(this.context, this._internalFormat as GLenum);
             // Fix in case of implicit float and half-float texture generation (e.g., in webgl with half_float support).
-            if (this._type === this.context.gl2facade.HALF_FLOAT && this._internalFormat !== this.context.gl.RGBA16F) {
+            if (this._type === this.context.gl2facade.HALF_FLOAT && this._internalFormat !== this.context.gl2.RGBA16F) {
                 bytes *= 2;
-            } else if (this._type === this.context.gl.FLOAT && this._internalFormat !== this.context.gl.RGBA16F) {
+            } else if (this._type === this.context.gl.FLOAT && this._internalFormat !== this.context.gl2.RGBA16F) {
                 bytes *= 4;
             }
         }

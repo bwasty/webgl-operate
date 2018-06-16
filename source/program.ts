@@ -30,7 +30,8 @@ export class Program extends AbstractObject<WebGLProgram> implements Bindable {
     /**
      * Default program, e.g., used for unbind.
      */
-    static readonly DEFAULT_PROGRAM = undefined;
+    // tslint:disable-next-line:no-null-keyword
+    static readonly DEFAULT_PROGRAM = null;
 
 
     /**
@@ -66,7 +67,7 @@ export class Program extends AbstractObject<WebGLProgram> implements Bindable {
         gl.linkProgram(this._object);
 
         if (!gl.getProgramParameter(this._object, gl.LINK_STATUS)) {
-            const infoLog: string = gl.getProgramInfoLog(this._object);
+            const infoLog = gl.getProgramInfoLog(this._object);
             log(LogLevel.Dev, `linking of program '${this._identifier}' failed: '${infoLog}'`);
             return false;
         }
@@ -95,7 +96,7 @@ export class Program extends AbstractObject<WebGLProgram> implements Bindable {
      * @param shaders - Vertex and fragment shaders that are to be attached to the program.
      * @returns - Either a new program or undefined if linking failed or one of the shaders is invalid/not compiled.
      */
-    protected create(shaders: Array<Shader>): WebGLProgram | undefined {
+    protected create(shaders: Array<Shader>): WebGLProgram | null {
         const gl = this._context.gl;
 
         let numVertShaders = 0;
@@ -117,7 +118,8 @@ export class Program extends AbstractObject<WebGLProgram> implements Bindable {
         logIf(numVertShaders < 1, LogLevel.Dev, `at least one vertex shader is expected`);
         logIf(numFragShaders < 1, LogLevel.Dev, `at least one fragment shader is expected`);
         if (numVertShaders < 1 || numFragShaders < 1) {
-            return undefined;
+            // tslint:disable-next-line:no-null-keyword
+            return null;
         }
 
         this._object = gl.createProgram();
@@ -125,7 +127,8 @@ export class Program extends AbstractObject<WebGLProgram> implements Bindable {
 
         if (!this.attach(shaders) || !this.link()) {
             this.delete();
-            return undefined;
+            // tslint:disable-next-line:no-null-keyword
+            return null;
         }
         this.detach(shaders);
 
@@ -139,7 +142,8 @@ export class Program extends AbstractObject<WebGLProgram> implements Bindable {
     protected delete(): void {
         assert(this._object !== undefined, `expected WebGLProgram object`);
         this._context.gl.deleteProgram(this._object);
-        this._object = undefined;
+        // tslint:disable-next-line:no-null-keyword
+        this._object = null;
         this._valid = false;
     }
 
@@ -166,7 +170,7 @@ export class Program extends AbstractObject<WebGLProgram> implements Bindable {
      * @param uniform - Uniform identifier to request location of.
      */
     @Initializable.assert_initialized()
-    uniform(uniform: string): WebGLUniformLocation {
+    uniform(uniform: string): WebGLUniformLocation | null {
         return this._context.gl.getUniformLocation(this._object, uniform);
     }
 

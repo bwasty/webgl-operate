@@ -71,7 +71,7 @@ export class Wizard {
         }
 
         /* In this case, no specialized internal formats are available. */
-        if (context.isWebGL1) {
+        if (!(gl instanceof WebGL2RenderingContext)) {
             return [target, type, query];
         }
 

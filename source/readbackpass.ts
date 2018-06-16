@@ -85,7 +85,7 @@ export class ReadbackPass extends Initializable {
 
 
     protected _program: Program;
-    protected _uOffset: WebGLUniformLocation;
+    protected _uOffset: WebGLUniformLocation | null;
     protected _uScale: WebGLUniformLocation;
 
 
@@ -148,7 +148,7 @@ export class ReadbackPass extends Initializable {
         this._depthFBO.bind();
 
         if (this._context.isWebGL2 || this._context.supportsDrawBuffers) {
-            gl.readBuffer(this._depthAttachment);
+            (gl as any).readBuffer(this._depthAttachment);
         }
         gl.readPixels(x, size[1] - (y + 0.5), 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, this._buffer);
 
@@ -206,8 +206,8 @@ export class ReadbackPass extends Initializable {
 
         /* Bind the framebuffer and read back the requested pixel. */
 
-        if ((this._context.isWebGL2 || this._context.supportsDrawBuffers) && gl.readBuffer) {
-            gl.readBuffer(gl.COLOR_ATTACHMENT0);
+        if ((this._context.isWebGL2 || this._context.supportsDrawBuffers) && (gl as any).readBuffer) {
+            (gl as any).readBuffer(gl.COLOR_ATTACHMENT0);
         }
         gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, this._buffer);
         this._framebuffer.unbind();
@@ -344,8 +344,8 @@ export class ReadbackPass extends Initializable {
 
         this._idFBO.bind();
         if ((this._context.isWebGL2 || this._context.supportsDrawBuffers)
-            && gl.readBuffer) {
-            gl.readBuffer(this._idAttachment);
+            && (gl as any).readBuffer) {
+            (gl as any).readBuffer(this._idAttachment);
         }
         gl.readPixels(x, size[1] - (y + 0.5), 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, this._buffer);
 

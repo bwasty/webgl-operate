@@ -14,16 +14,17 @@ export class Buffer extends AbstractObject<WebGLBuffer> implements Bindable {
     /**
      * Default buffer, e.g., used for unbind.
      */
-    static readonly DEFAULT_BUFFER = undefined;
+    // tslint:disable-next-line:no-null-keyword
+    static readonly DEFAULT_BUFFER = null;
 
 
     /** @see {@link target} */
-    protected _target: GLenum | undefined = Buffer.DEFAULT_BUFFER;
+    protected _target: GLenum | null = Buffer.DEFAULT_BUFFER;
 
     /**
      * Create a buffer object on the GPU.
      */
-    protected create(target: GLenum): WebGLBuffer | undefined {
+    protected create(target: GLenum): WebGLBuffer | null {
         const gl = this._context.gl;
 
         this._object = gl.createBuffer();
@@ -45,7 +46,8 @@ export class Buffer extends AbstractObject<WebGLBuffer> implements Bindable {
         assert(this._object instanceof WebGLBuffer, `expected WebGLBuffer object`);
         this._context.gl.deleteBuffer(this._object);
 
-        this._object = undefined;
+        // tslint:disable-next-line:no-null-keyword
+        this._object = null;
         this._valid = false;
 
         this._target = Buffer.DEFAULT_BUFFER;
@@ -58,7 +60,7 @@ export class Buffer extends AbstractObject<WebGLBuffer> implements Bindable {
     bind(): void {
         assert(this._target === this._context.gl.ARRAY_BUFFER || this._target === this._context.gl.ELEMENT_ARRAY_BUFFER,
             `expected either ARRAY_BUFFER or ELEMENT_ARRAY_BUFFER as buffer target`);
-        this._context.gl.bindBuffer(this._target, this._object);
+        this._context.gl.bindBuffer(this._target!, this._object);
     }
 
     /**
@@ -66,7 +68,7 @@ export class Buffer extends AbstractObject<WebGLBuffer> implements Bindable {
      */
     @Initializable.assert_initialized()
     unbind(): void {
-        this.context.gl.bindBuffer(this._target, Buffer.DEFAULT_BUFFER);
+        this.context.gl.bindBuffer(this._target!, Buffer.DEFAULT_BUFFER);
     }
 
     /**

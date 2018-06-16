@@ -20,7 +20,7 @@ export abstract class AbstractObject<T> extends Initializable {
     protected _identifier: string;
 
     /** @see {@link object} */
-    protected _object: T | undefined;
+    protected _object: T | null;
 
     /** @see {@link valid} */
     protected _valid = false;
@@ -48,7 +48,7 @@ export abstract class AbstractObject<T> extends Initializable {
      * Object creation which is invoked on initialization.
      * @returns - The created WebGL object handle.
      */
-    protected abstract create(...args: any[]): T | undefined;
+    protected abstract create(...args: any[]): T | null;
 
     /**
      * Object deletion which is invoked on uninitialization.

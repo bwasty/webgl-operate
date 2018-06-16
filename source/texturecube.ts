@@ -29,7 +29,8 @@ export class TextureCube extends AbstractObject<WebGLTexture> implements Bindabl
     /**
      * Default texture, e.g., used for unbind.
      */
-    static readonly DEFAULT_TEXTURE = undefined;
+    // tslint:disable-next-line:no-null-keyword
+    static readonly DEFAULT_TEXTURE = null;
 
     /** @see {@link size} */
     protected _size: GLsizei = 0;
@@ -86,13 +87,13 @@ export class TextureCube extends AbstractObject<WebGLTexture> implements Bindabl
      * @param format - Format of the texture data even though no data is passed.
      * @param type - Data type of the texel data.
      */
-    protected create(size: GLsizei, internalFormat: GLenum, format: GLenum, type: GLenum): WebGLTexture | undefined {
+    protected create(size: GLsizei, internalFormat: GLenum, format: GLenum, type: GLenum): WebGLTexture | null {
 
         assert(size > 0, `texture cube requires valid size (width/height) of greater than zero`);
         const gl = this._context.gl;
         const gl2facade = this._context.gl2facade;
 
-        this._object = gl.createTexture();
+        this._object = gl.createTexture()!;
 
         this._size = size;
         this._internalFormat = internalFormat;
@@ -134,7 +135,8 @@ export class TextureCube extends AbstractObject<WebGLTexture> implements Bindabl
         assert(this._object instanceof WebGLTexture, `expected WebGLTexture object`);
         this._context.gl.deleteTexture(this._object);
 
-        this._object = undefined;
+        // tslint:disable-next-line:no-null-keyword
+        this._object = null;
         this._valid = false;
 
         this._internalFormat = 0;
@@ -250,9 +252,9 @@ export class TextureCube extends AbstractObject<WebGLTexture> implements Bindabl
 
         let bytesPerFace = this._size * this._size * byteSizeOfFormat(this.context, this._internalFormat as GLenum);
         // Fix in case of implicit float and half-float texture generation (e.g., in webgl with half_float support).
-        if (this._type === this.context.gl2facade.HALF_FLOAT && this._internalFormat !== this.context.gl.RGBA16F) {
+        if (this._type === this.context.gl2facade.HALF_FLOAT && this._internalFormat !== this.context.gl2.RGBA16F) {
             bytesPerFace *= 2;
-        } else if (this._type === this.context.gl.FLOAT && this._internalFormat !== this.context.gl.RGBA16F) {
+        } else if (this._type === this.context.gl.FLOAT && this._internalFormat !== this.context.gl2.RGBA16F) {
             bytesPerFace *= 4;
         }
 

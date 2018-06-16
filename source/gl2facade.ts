@@ -5,8 +5,8 @@ import { assert } from './auxiliaries';
 import { Context } from './context';
 
 
-export type TexImage2DData = GLintptr | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement |
-    ImageBitmap | ImageData | ArrayBufferView | undefined;
+export type TexImage2DData = HTMLImageElement | HTMLCanvasElement | HTMLVideoElement |
+    ImageBitmap | ImageData | undefined;
 
 
 /**
@@ -61,7 +61,7 @@ export class GL2Facade {
             case Context.BackendType.WebGL2:
             /* falls through */
             default:
-                this._halfFloat = context.gl.HALF_FLOAT;
+                this._halfFloat = context.gl2.HALF_FLOAT;
                 break;
         }
     }
@@ -183,7 +183,7 @@ export class GL2Facade {
             default:
                 this._colorAttachmentMin = context.gl.COLOR_ATTACHMENT0;
                 this._colorAttachmentMax = context.gl.COLOR_ATTACHMENT0
-                    + gl.getParameter(gl.MAX_COLOR_ATTACHMENTS) as GLenum;
+                    + gl.getParameter(context.gl2.MAX_COLOR_ATTACHMENTS) as GLenum;
 
                 for (let i = 0; i < 16; ++i) {
                     // Enums are assumed to be incremental in their definition ...
@@ -221,18 +221,18 @@ export class GL2Facade {
 
         this.drawArraysInstanced = context.isWebGL2 ?
             (mode: GLenum, first: GLint, count: GLsizei, instanceCount: GLsizei) =>
-                context.gl.drawArraysInstanced(mode, first, count, instanceCount) :
+                context.gl2.drawArraysInstanced(mode, first, count, instanceCount) :
             (mode: GLenum, first: GLint, count: GLsizei, instanceCount: GLsizei) =>
                 context.instancedArrays.drawArraysInstancedANGLE(mode, first, count, instanceCount);
 
         this.drawElementsInstanced = context.isWebGL2 ?
             (mode: GLenum, count: GLint, type: GLsizei, offset: GLintptr, primcount: GLsizei) =>
-                context.gl.drawElementsInstanced(mode, count, type, offset, primcount) :
+                context.gl2.drawElementsInstanced(mode, count, type, offset, primcount) :
             (mode: GLenum, count: GLint, type: GLsizei, offset: GLintptr, primcount: GLsizei) =>
                 context.instancedArrays.drawElementsInstancedANGLE(mode, count, type, offset, primcount);
 
         this.vertexAttribDivisor = context.isWebGL2 ?
-            (index: GLuint, divisor: GLuint) => context.gl.vertexAttribDivisor(index, divisor) :
+            (index: GLuint, divisor: GLuint) => context.gl2.vertexAttribDivisor(index, divisor) :
             (index: GLuint, divisor: GLuint) => context.instancedArrays.vertexAttribDivisorANGLE(index, divisor);
     }
 
@@ -256,7 +256,7 @@ export class GL2Facade {
         }
 
         this.drawBuffers = context.isWebGL2 ?
-            (buffers: Array<GLenum>) => context.gl.drawBuffers(buffers) :
+            (buffers: Array<GLenum>) => context.gl2.drawBuffers(buffers) :
             (buffers: Array<GLenum>) => context.drawBuffers.drawBuffersWEBGL(buffers);
     }
 
@@ -289,19 +289,19 @@ export class GL2Facade {
         }
 
         this.createVertexArray = context.isWebGL2 ?
-            () => context.gl.createVertexArray() :
+            () => context.gl2.createVertexArray() :
             () => context.vertexArrayObject.createVertexArrayOES();
 
         this.deleteVertexArray = context.isWebGL2 ?
-            (arrayObject: any) => context.gl.deleteVertexArray(arrayObject) :
+            (arrayObject: any) => context.gl2.deleteVertexArray(arrayObject) :
             (arrayObject: any) => context.vertexArrayObject.deleteVertexArrayOES(arrayObject);
 
         this.isVertexArray = context.isWebGL2 ?
-            (arrayObject: any) => context.gl.isVertexArray(arrayObject) :
+            (arrayObject: any) => context.gl2.isVertexArray(arrayObject) :
             (arrayObject: any) => context.vertexArrayObject.isVertexArrayOES(arrayObject);
 
         this.bindVertexArray = context.isWebGL2 ?
-            (arrayObject: any) => context.gl.bindVertexArray(arrayObject) :
+            (arrayObject: any) => context.gl2.bindVertexArray(arrayObject) :
             (arrayObject: any) => context.vertexArrayObject.bindVertexArrayOES(arrayObject);
     }
 
@@ -324,7 +324,7 @@ export class GL2Facade {
     protected queryMaxUniformVec3Components(context: Context): void {
         const gl = context.gl;
 
-        this._maxUniformVec3Components = context.isWebGL2
+        this._maxUniformVec3Components = gl instanceof WebGL2RenderingContext
             ? gl.getParameter(gl.MAX_VERTEX_UNIFORM_COMPONENTS)
             : gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS) * 3;
     }
@@ -342,17 +342,17 @@ export class GL2Facade {
     protected queryTexImageInterface(context: Context): void {
         const gl = context.gl;
 
-        if (context.isWebGL2) {
+        if (gl instanceof WebGL2RenderingContext) {
             this.texImage2D = (target: GLenum, level: GLint, internalformat: GLenum, width: GLsizei, height: GLsizei,
                 border: GLint, format: GLenum, type: GLenum, source?: TexImage2DData, offset?: GLintptr) => {
                 /* Please note that source must be 'null', not '0' nor 'undefined' for ie and edge to work. */
                 if (source instanceof ArrayBuffer) {
-                    return gl.texImage2D(target, level, internalformat, width, height, border
+                    return (gl as any).texImage2D(target, level, internalformat, width, height, border
                         /* tslint:disable-next-line:no-null-keyword */
                         , format, type, source === undefined ? null : source, offset);
                 }
                 assert(offset === undefined, `offset expected to be undefined for non ArrayBuffer source`);
-                return gl.texImage2D(target, level, internalformat, width, height, border
+                return (gl as any).texImage2D(target, level, internalformat, width, height, border
                     /* tslint:disable-next-line:no-null-keyword */
                     , format, type, source === undefined ? null : source);
             };

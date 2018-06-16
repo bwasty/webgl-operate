@@ -25,8 +25,8 @@ namespace debug {
         protected _program: Program;
 
         protected _ndcOffsetKernel: AntiAliasingKernel;
-        protected _uNdcOffset: WebGLUniformLocation;
-        protected _uFrameNumber: WebGLUniformLocation;
+        protected _uNdcOffset: WebGLUniformLocation | null;
+        protected _uFrameNumber: WebGLUniformLocation | null;
         protected _ndcTriangle: NdcFillingTriangle;
 
         protected _accumulate: AccumulatePass;
@@ -150,7 +150,7 @@ namespace debug {
 
             if (!this._intermediateFBO.initialized) {
                 this._colorRenderTexture.initialize(this._frameSize[0], this._frameSize[1],
-                    this._context.isWebGL2 ? gl.RGBA8 : gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE);
+                    gl instanceof WebGL2RenderingContext ? gl.RGBA8 : gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE);
                 this._depthRenderbuffer.initialize(this._frameSize[0], this._frameSize[1], gl.DEPTH_COMPONENT16);
                 this._intermediateFBO.initialize([[gl2facade.COLOR_ATTACHMENT0, this._colorRenderTexture]
                     , [gl.DEPTH_ATTACHMENT, this._depthRenderbuffer]]);

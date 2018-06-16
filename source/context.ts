@@ -452,6 +452,14 @@ export class Context {
     }
 
     /**
+     * Unsafe convenience getter to overcome the type checker.
+     * Only use if the context definitely is a WebGL2 context!
+     */
+    get gl2() {
+        return this._context as WebGL2RenderingContext;
+    }
+
+    /**
      * WebGL2 facade for WebGL2 API like access to features mandatory to this engine.
      */
     get gl2facade() {

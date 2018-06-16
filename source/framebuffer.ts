@@ -22,7 +22,8 @@ export class Framebuffer extends AbstractObject<WebGLFramebuffer> implements Bin
     /**
      * Default framebuffer, e.g., used for unbind.
      */
-    static readonly DEFAULT_FRAMEBUFFER = undefined;
+    // tslint:disable-next-line:no-null-keyword
+    static readonly DEFAULT_FRAMEBUFFER = null;
 
 
     /**
@@ -89,7 +90,7 @@ export class Framebuffer extends AbstractObject<WebGLFramebuffer> implements Bin
                 return 'the format of the attachment is not supported or if depth and stencil attachments are not ' +
                     'the same renderbuffer (UNSUPPORTED)';
 
-            case gl.FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+            case (gl as WebGL2RenderingContext).FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
                 return 'the values of gl.RENDERBUFFER_SAMPLES are different among attached renderbuffers, or are ' +
                     'non-zero if the attached images are a mix of renderbuffers and textures (INCOMPLETE_MULTISAMPLE)';
 
@@ -105,7 +106,7 @@ export class Framebuffer extends AbstractObject<WebGLFramebuffer> implements Bin
      * @param attachments - tuples that associate an attachment to its actual render object, either a renderbuffer or
      * texture, e.g., `[ gl.COLOR_ATTACHMENT0, someTexture ]`.
      */
-    protected create(attachments: Array<[GLenum, Renderbuffer | Texture2]>): WebGLFramebuffer | undefined {
+    protected create(attachments: Array<[GLenum, Renderbuffer | Texture2]>): WebGLFramebuffer | null {
         const gl = this._context.gl;
         const gl2facade = this.context.gl2facade;
 
@@ -182,7 +183,8 @@ export class Framebuffer extends AbstractObject<WebGLFramebuffer> implements Bin
         assert(this._object instanceof WebGLFramebuffer, `expected WebGLFramebuffer object`);
         this.context.gl.deleteFramebuffer(this._object);
 
-        this._object = undefined;
+        // tslint:disable-next-line:no-null-keyword
+        this._object = null;
         this._valid = false;
     }
 
@@ -239,7 +241,7 @@ export class Framebuffer extends AbstractObject<WebGLFramebuffer> implements Bin
     protected es3Clear(mask: GLbitfield, bind: boolean = true, unbind: boolean = true,
         colorClearQueue?: Array<GLint>): void {
 
-        const gl = this.context.gl;
+        const gl = this.context.gl2;
 
         const clearDepth = bitInBitfield(mask, gl.DEPTH_BUFFER_BIT);
         const clearStencil = bitInBitfield(mask, gl.STENCIL_BUFFER_BIT);
