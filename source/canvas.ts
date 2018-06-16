@@ -125,7 +125,7 @@ export class Canvas extends Resizable {
      * Note: data-frame-size takes precedence if both frame-scale and frame-size data attributes are provided.
      * @param element - Canvas element or element id {string} to be used for querying the canvas element.
      */
-    constructor(element: HTMLCanvasElement | string) {
+    constructor(element: HTMLCanvasElement | string, contextAttributes?: WebGLContextAttributes) {
         super(); // setup resize event handling
         this._element = element instanceof HTMLCanvasElement ? element :
             document.getElementById(element) as HTMLCanvasElement;
@@ -134,7 +134,7 @@ export class Canvas extends Resizable {
         const dataset = this._element.dataset;
 
         /* Requesting a context asserts when no context could be created. */
-        this._context = Context.request(this._element);
+        this._context = Context.request(this._element, contextAttributes);
         this.configureController(dataset);
 
         this.configureSizeAndScale(dataset);
