@@ -1,16 +1,16 @@
+// import {
+//     XRDevice,
+//     XRFrame,
+//     XRFrameOfReference, XRFrameOfReferenceOptions, XRFrameOfReferenceType,
+//     XRInputPose,
+//     XRSession, XRSessionCreationOptions,
+//     XRWebGLLayerInit,
+// } from './webxr';
 import { assert } from './auxiliaries';
 import { Canvas } from './canvas';
 import { Controllable } from './controller';
 import { Renderer } from './renderer';
 import { RenderView } from './renderview';
-import {
-    XRDevice,
-    XRFrame,
-    XRFrameOfReference, XRFrameOfReferenceOptions, XRFrameOfReferenceType,
-    XRInputPose,
-    XRSession, XRSessionCreationOptions,
-    XRWebGLLayerInit,
-} from './webxr';
 
 // tslint:disable-next:member-ordering
 /**

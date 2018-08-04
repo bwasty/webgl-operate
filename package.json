@@ -68,7 +68,8 @@
         "webpack-bundle-analyzer": "~2.13.1",
         "webpack-cli": "~3.0.8",
         "webpack-glsl-loader": "~1.0.1",
-        "webpack-rxjs-externals": "~2.0.0"
+        "webpack-rxjs-externals": "~2.0.0",
+        "@types/webxr": "file:../../js/DefinitelyTyped/types/webxr"
     },
     "peerDependencies": {
         "rxjs": "~6.2.1"

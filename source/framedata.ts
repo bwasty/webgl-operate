@@ -53,7 +53,7 @@ export class FrameData {
         return this.frame.session.getInputSources();
     }
 
-    private _inputPoses: Array<XRInputPose | null> = [];
+    // private _inputPoses: Array<XRInputPose | null> = [];
 
     /**
      *
@@ -68,6 +68,6 @@ export class FrameData {
             this.inputPoses.length = inputSources.length;
         }
 
-        return
+        return [];
     }
 }
