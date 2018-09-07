@@ -17,7 +17,7 @@ import { Texture2 } from '../texture2';
 import { TestNavigation } from './testnavigation';
 
 
-namespace debug {
+export namespace debug {
 
     export class TestRenderer extends Renderer {
 
@@ -201,5 +201,3 @@ namespace debug {
     }
 
 }
-
-export = debug;
