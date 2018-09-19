@@ -73,7 +73,7 @@
         "build-lib": "webpack-cli --mode production --config webpack.config.lib.js",
         "build-lib-esm": "webpack-cli --mode development --config webpack.config.lib-esm.js",
         "pug-watch": "node pugconfig.js --watch",
-        "cleanup": "rimraf ./dist ./lib ./build",
+        "cleanup": "rimraf ./dist ./lib ./lib-esm ./build",
         "lint": "tslint --project tsconfig.json --format stylish --config tslint.json",
         "test": "mocha",
         "test-nyc": "nyc mocha",

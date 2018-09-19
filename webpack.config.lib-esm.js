@@ -1,3 +1,27 @@
+var glob = require('glob');
+var fs = require('fs');
+
+// src: https://stackoverflow.com/a/43611910/2858790
+function getEntries() {
+    // return fs.readdirSync('./source/')
+    return glob.sync('source/**/*.ts')
+        .filter(
+            (file) => file.match(/.*\.ts$/)
+        )
+        .map((file) => {
+            file = file.replace('source/', '');
+            return {
+                name: file.substring(0, file.length - 3),
+                path: file
+            }
+        }).reduce((memo, file) => {
+            memo[file.name] = file.path
+            return memo;
+        }, {})
+}
+
+const entries = getEntries();
+console.log(entries);
 
 module.exports = (env, options) => {
 
@@ -5,9 +29,8 @@ module.exports = (env, options) => {
 
     config.cache = false;
     config.output.path = __dirname + '/lib-esm';
-    config.entry = {
-        'webgl-operate': ['require.ts', 'polyfill.ts', 'webgl-operate.ts']
-    };
+    // config.entry = glob.sync('source/**/*.ts').map(p => p.replace('source/', ''))
+    config.entry = entries;
 
     config.module.rules[0].use.options.compilerOptions.module = 'es6';
     config.module.rules[0].use.options.compilerOptions.noUnusedLocals = true;

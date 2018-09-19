@@ -18,7 +18,8 @@
         "preserveConstEnums": true,
         "allowSyntheticDefaultImports": false,
         "skipLibCheck": true,
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "moduleResolution": "node"
     },
     "typedocOptions": {
         "mode": "file",
