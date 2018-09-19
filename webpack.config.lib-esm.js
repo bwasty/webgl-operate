@@ -1,5 +1,4 @@
 var glob = require('glob');
-var fs = require('fs');
 
 // src: https://stackoverflow.com/a/43611910/2858790
 function getEntries() {
@@ -29,10 +28,10 @@ module.exports = (env, options) => {
 
     config.cache = false;
     config.output.path = __dirname + '/lib-esm';
-    // config.entry = glob.sync('source/**/*.ts').map(p => p.replace('source/', ''))
     config.entry = entries;
 
     config.module.rules[0].use.options.compilerOptions.module = 'es6';
+    config.module.rules[0].use.options.compilerOptions.outDir = 'lib-esm';
     config.module.rules[0].use.options.compilerOptions.noUnusedLocals = true;
     config.module.rules[0].use.options.compilerOptions.declaration = true;
     config.module.rules[0].use.options.compilerOptions.removeComments = false;
