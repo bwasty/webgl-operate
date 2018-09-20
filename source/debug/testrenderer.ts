@@ -16,6 +16,8 @@ import { Shader } from '../shader';
 import { Texture2 } from '../texture2';
 import { TestNavigation } from './testnavigation';
 
+// import fragmentShaderSource from './testrenderer.frag';
+// import vertexShaderSource from './testrenderer.vert';
 
 export class TestRenderer extends Renderer {
 
@@ -59,8 +61,10 @@ export class TestRenderer extends Renderer {
 
         const vert = new Shader(this._context, gl.VERTEX_SHADER, 'testrenderer.vert');
         vert.initialize(require('./testrenderer.vert'));
+        // vert.initialize(vertexShaderSource);
         const frag = new Shader(this._context, gl.FRAGMENT_SHADER, 'testrenderer.frag');
         frag.initialize(require('./testrenderer.frag'));
+        // frag.initialize(fragmentShaderSource);
 
         this._program = new Program(this._context);
         this._program.initialize([vert, frag]);

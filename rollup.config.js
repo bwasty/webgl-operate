@@ -3,6 +3,7 @@ import commonjs from 'rollup-plugin-commonjs'
 import sourceMaps from 'rollup-plugin-sourcemaps'
 import typescript from 'rollup-plugin-typescript2'
 import json from 'rollup-plugin-json'
+import glsl from 'rollup-plugin-glsl';
 
 const pkg = require('./package.json');
 const glob = require('glob');
@@ -26,6 +27,9 @@ export default {
     plugins: [
         // Allow json resolution
         json(),
+        glsl({
+            include: ['source/**/*.vert', 'source/**/*.frag'],
+        }),
         // Compile TypeScript files
         typescript({
             useTsconfigDeclarationDir: true,

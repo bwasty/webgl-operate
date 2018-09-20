@@ -3,6 +3,7 @@ import { assert, GETparameter } from './auxiliaries';
 
 import { ExtensionsHash } from './extensionshash';
 
+// import masquerade from './data/masquerade.json';
 
 /**
  * Mask object for context masquerade. It is used to artificially restrict the capabilities of context instances.
@@ -22,7 +23,7 @@ import { ExtensionsHash } from './extensionshash';
 export class ContextMasquerade {
 
     /** @see {@link presets} */
-    protected static readonly MASQUERADE_JSON: Array<ContextMasquerade.Preset> = require('./data/masquerade.json');
+    // protected static readonly MASQUERADE_JSON: Array<ContextMasquerade.Preset> = masquerade;
 
     /** @see {@link backend} */
     protected _backend: string;
@@ -131,7 +132,8 @@ export class ContextMasquerade {
      * simplify cross-browser testing without actually using different browsers.
      */
     static presets(): Array<ContextMasquerade.Preset> {
-        return this.MASQUERADE_JSON;
+        // return this.MASQUERADE_JSON;
+        return [];
     }
 
     /**
