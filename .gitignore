@@ -1,5 +1,6 @@
 .nyc_output
 .git
+.rpt2_cache
 node_modules/
 dist/
 lib/

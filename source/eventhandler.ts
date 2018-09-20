@@ -112,11 +112,11 @@ export class EventHandler {
         switch (type) {
             case MouseEventProvider.Type.Wheel:
                 this._subscriptions.push((observable as Observable<WheelEvent>).subscribe(
-                    (event) => { latest.push(event); this.invalidate(); }));
+                    (event: MouseEvent) => { latest.push(event); this.invalidate(); }));
                 break;
             default:
                 this._subscriptions.push((observable as Observable<MouseEvent>).subscribe(
-                    (event) => { latest.push(event); this.invalidate(); }));
+                    (event: MouseEvent) => { latest.push(event); this.invalidate(); }));
                 break;
         }
         (this._mouseEventHandlerByType.get(type) as Array<MouseEventHandler>).push(handler);
@@ -161,7 +161,7 @@ export class EventHandler {
         const observable = (this._touchEventProvider as TouchEventProvider).observable(type);
 
         this._subscriptions.push((observable as Observable<TouchEvent>).subscribe(
-            (event) => { latest.push(event); this.invalidate(); }));
+            (event: any) => { latest.push(event); this.invalidate(); }));
 
         (this._touchEventHandlerByType.get(type) as Array<TouchEventHandler>).push(handler);
     }

@@ -14,11 +14,10 @@
         "type": "git",
         "url": "https://github.com/cginternals/webgl-operate.git"
     },
-    "main": "./lib/webgl-operate.js",
+    "main": "./lib/webgl-operate.umd.js",
+    "module": "./lib/webgl-operate.js",
     "types": "./lib/webgl-operate.d.ts",
-    "sideEffects": [
-        "./source/polyfill.ts"
-    ],
+    "sideEffects": false,
     "maintainers": [
         {
             "name": "Daniel Limberger",
@@ -47,6 +46,13 @@
         "nyc": "~12.0.2",
         "pug": "~2.0.3",
         "rimraf": "~2.6.2",
+        "rollup": "^0.66.1",
+        "rollup-plugin-commonjs": "^9.1.8",
+        "rollup-plugin-glsl": "^1.2.0",
+        "rollup-plugin-json": "^3.1.0",
+        "rollup-plugin-node-resolve": "^3.4.0",
+        "rollup-plugin-sourcemaps": "^0.4.2",
+        "rollup-plugin-typescript2": "^0.17.0",
         "rxjs": "~6.2.2",
         "sinon": "~4.5.0",
         "source-map-support": "~0.5.9",
