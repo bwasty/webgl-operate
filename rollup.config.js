@@ -4,6 +4,7 @@ import sourceMaps from 'rollup-plugin-sourcemaps'
 import typescript from 'rollup-plugin-typescript2'
 import json from 'rollup-plugin-json'
 import glsl from 'rollup-plugin-glsl';
+import { terser } from "rollup-plugin-terser";
 
 const pkg = require('./package.json');
 const glob = require('glob');
@@ -48,5 +49,7 @@ export default {
 
         // Resolve source maps to the original source
         sourceMaps(),
+
+        terser()
     ],
 }
